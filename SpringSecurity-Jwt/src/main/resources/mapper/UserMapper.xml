@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.star.dao.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.star.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="enabled" property="enabled"/>
+<!--        <result column="accountNonExpired" property="accountNonExpired"/>-->
+<!--        <result column="accountNonLocked" property="accountNonLocked"/>-->
+<!--        <result column="credentialsNonExpired" property="credentialsNonExpired"/>-->
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , username, password, enabled, accountNonExpired, accountNonLocked, credentialsNonExpired
+    </sql>
+    <update id="updatePassword">
+        update `user`
+        set password=#{password}
+        where username = #{username}
+    </update>
+
+    <select id="findAllUser" resultType="com.star.entity.User">
+        select *
+        from user;
+    </select>
+    <select id="getRolesByUserId" resultType="com.star.entity.Role">
+        select r.id,
+               r.name,
+               r.nameZh nameZh
+        from role r,
+             user_role ur
+        where r.id = ur.rid
+          and ur.uid = #{userId}
+    </select>
+
+    <select id="loadUserByUsername" resultType="com.star.entity.User">
+        select id,
+               username,
+               password,
+               enabled,
+               locked
+--                accountNonExpired,
+--                accountNonLocked,
+--                credentialsNonExpired
+        from user
+        where username = #{username}
+    </select>
+
+</mapper>
